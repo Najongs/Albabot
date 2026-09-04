@@ -12,5 +12,7 @@ catkin_install_python(PROGRAMS
   scripts/explorer.py
   scripts/set_remote_mode.py
   scripts/monitor.py
+  scripts/drive_test.py
+  scripts/motor_char.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
