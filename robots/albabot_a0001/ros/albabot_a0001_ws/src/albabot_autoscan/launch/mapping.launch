@@ -1,0 +1,74 @@
+<launch>
+  <!-- ============================================================
+       mapping.launch  -  움직임 없는 RGB-D 매핑 (Phase 0 검증용)
+       RealSense(front) -> depth->laserscan(/camera/scan) -> RTAB-Map SLAM
+       모터/시리얼 없음. 손으로 밀거나 조이스틱으로 천천히 돌며 맵 생성 확인.
+       ============================================================ -->
+
+  <arg name="camera"     default="camera"/>
+  <arg name="serial_no"  default="934222071735"/>   <!-- 전방 D435. 헤드=014122070972 -->
+  <arg name="rtabmap_viz" default="false"/>
+  <arg name="rviz"        default="false"/>
+
+  <!-- base_link -> camera_link (대략 마운트 오프셋: 전방 0.2m, 높이 0.4m) -->
+  <node pkg="tf" type="static_transform_publisher" name="base_to_camera"
+        args="0.2 0.0 0.4 0 0 0 base_link $(arg camera)_link 50"/>
+
+  <!-- RealSense: 컬러+정렬깊이+포인트클라우드+IMU -->
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+    <arg name="camera"     value="$(arg camera)"/>
+    <arg name="serial_no"  value="$(arg serial_no)"/>
+    <arg name="align_depth" value="true"/>
+    <arg name="filters"    value="pointcloud"/>
+    <arg name="enable_gyro" value="true"/>
+    <arg name="enable_accel" value="true"/>
+    <arg name="unite_imu_method" value="linear_interpolation"/>
+    <arg name="color_fps"  value="15"/>
+    <arg name="depth_fps"  value="15"/>
+  </include>
+
+  <!-- IMU 필터 (RTAB-Map 중력 정렬용) -->
+  <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_node">
+    <remap from="/imu/data_raw" to="/$(arg camera)/imu"/>
+    <remap from="/imu/data"     to="/rtabmap/imu"/>
+    <rosparam>
+      use_mag: false
+      publish_tf: false
+      world_frame: enu
+    </rosparam>
+  </node>
+
+  <!-- depth 포인트클라우드 -> 가상 2D 레이저스캔 (/camera/scan) : 장애물 감지 입력 -->
+  <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+    <remap from="cloud_in" to="/$(arg camera)/depth/color/points"/>
+    <remap from="scan"     to="/camera/scan"/>
+    <rosparam>
+      target_frame: base_link
+      transform_tolerance: 0.05
+      min_height: 0.05
+      max_height: 1.0
+      angle_min: -0.7854
+      angle_max: 0.7854
+      angle_increment: 0.0087
+      scan_time: 0.06667
+      range_min: 0.25
+      range_max: 4.0
+      use_inf: true
+      concurrency_level: 1
+    </rosparam>
+  </node>
+
+  <!-- RTAB-Map RGB-D SLAM (매핑 모드: delete_db_on_start) -->
+  <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+    <arg name="rtabmap_args"   value="--delete_db_on_start --Optimizer/GravitySigma 0.3"/>
+    <arg name="depth_topic"    value="/$(arg camera)/aligned_depth_to_color/image_raw"/>
+    <arg name="rgb_topic"      value="/$(arg camera)/color/image_raw"/>
+    <arg name="camera_info_topic" value="/$(arg camera)/color/camera_info"/>
+    <arg name="frame_id"       value="base_link"/>
+    <arg name="approx_sync"    value="true"/>
+    <arg name="wait_imu_to_init" value="true"/>
+    <arg name="imu_topic"      value="/rtabmap/imu"/>
+    <arg name="rtabmapviz"     value="$(arg rtabmap_viz)"/>
+    <arg name="rviz"           value="$(arg rviz)"/>
+  </include>
+</launch>

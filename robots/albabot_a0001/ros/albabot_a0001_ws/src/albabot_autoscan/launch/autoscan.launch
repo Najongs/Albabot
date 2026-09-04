@@ -1,0 +1,40 @@
+<launch>
+  <!-- ============================================================
+       autoscan.launch  -  라이다 없이 저속 자율 공간스캔 (전체 스택)
+         매핑(mapping.launch) + 시리얼 + Remote모드 + 안전가드 + 탐색
+       안전 기본값: explore:=false  (모든 노드 기동하되 로봇은 정지 상태)
+         준비되면:  roslaunch albabot_autoscan autoscan.launch explore:=true
+       첫 주행은 반드시 바퀴 거치(들고) 상태에서 explore:=true 로 검증.
+       ============================================================ -->
+
+  <arg name="explore"    default="false"/>   <!-- true 여야 실제 탐색 주행 -->
+  <arg name="serial_no"  default="934222071735"/>
+  <arg name="motor_port" default="/dev/ttyUSB-Albabot"/>
+  <arg name="motor_baud" default="921600"/>
+
+  <!-- 파라미터: yaml 최상위 키(safety_guard:, explorer:)를 전역 로드.
+       노드명이 그 키와 같아 각 노드의 ~private 파라미터로 매핑된다. -->
+  <rosparam command="load" file="$(find albabot_autoscan)/config/autoscan.yaml"/>
+
+  <!-- 1) 인지: 카메라 + depth->scan + RTAB-Map -->
+  <include file="$(find albabot_autoscan)/launch/mapping.launch">
+    <arg name="serial_no" value="$(arg serial_no)"/>
+  </include>
+
+  <!-- 2) 모터 시리얼 브리지 (펌웨어) -->
+  <node name="serial_node" pkg="rosserial_python" type="serial_node.py" output="screen">
+    <param name="port" value="$(arg motor_port)"/>
+    <param name="baud" value="$(arg motor_baud)"/>
+  </node>
+
+  <!-- 3) Remote 모드 전환 + 잔여 미션 취소 (일회성) -->
+  <node name="set_remote_mode" pkg="albabot_autoscan" type="set_remote_mode.py" output="screen"/>
+
+  <!-- 4) 안전가드: /cmd_vel 유일 발행자 (장애물시 강제정지) -->
+  <node name="safety_guard" pkg="albabot_autoscan" type="safety_guard.py" output="screen"/>
+
+  <!-- 5) 탐색: explore:=true 일 때만. /scan_cmd 로 저속 주행 요청 -->
+  <group if="$(arg explore)">
+    <node name="explorer" pkg="albabot_autoscan" type="explorer.py" output="screen"/>
+  </group>
+</launch>

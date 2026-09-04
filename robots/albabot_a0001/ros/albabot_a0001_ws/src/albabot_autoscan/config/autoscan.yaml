@@ -1,0 +1,42 @@
+# albabot_autoscan 파라미터 (저속 자율 공간스캔)
+# 모든 속도/거리는 보수적으로. 첫 주행은 바퀴 거치(들고) 상태로.
+
+safety_guard:
+  # 입력 토픽
+  scan_topic: "/camera/scan"        # depth->laserscan (pointcloud_to_laserscan)
+  robot_info_topic: "/robot_info"   # 초음파(sonic) 포함
+  cmd_in_topic: "/scan_cmd"         # explorer 가 요청하는 [v, w]
+  cmd_out_topic: "/cmd_vel"         # 펌웨어로 나가는 [left, right] (유일 발행자)
+
+  # 안전 거리 (m)
+  stop_distance: 0.60               # 이 이내 장애물 -> 정지
+  slow_distance: 1.00               # 이 이내 -> 속도 선형 감속
+  front_angle_deg: 40.0             # 전방 ±각도 창에서만 판단 (좌우 여유 무시)
+
+  # 초음파 (cm 가정, robot_info.sonic[0..3])
+  use_ultrasonic: true
+  ultrasonic_stop_cm: 30.0          # 이 이내 -> 정지
+  ultrasonic_valid_max_cm: 250.0    # 이보다 크면 무효/미검출로 간주
+
+  # 모터 변환/상한 (driving_m1 GetVelocity 규약과 동일 부호)
+  wheel_base: 0.328                 # 축간거리 d
+  max_v: 0.6                        # 전진 명령 상한 (joy 스케일 단위, 최대 3.3)
+  max_w: 0.8                        # 회전 명령 상한
+  control_rate: 20.0                # Hz (하트비트 유지 위해 지속 발행)
+  cmd_timeout: 0.5                  # explorer 명령 이 시간 이상 끊기면 정지
+
+explorer:
+  scan_topic: "/camera/scan"
+  cmd_out_topic: "/scan_cmd"        # safety_guard 로 [v, w] 요청
+  rate: 10.0                        # Hz
+
+  # 반응형 탐색 파라미터
+  forward_v: 0.35                   # 순항 전진 속도 (저속)
+  turn_w: 0.6                       # 회전 속도
+  front_clear_distance: 1.2         # 전방이 이보다 가까우면 회전으로 전환
+  front_angle_deg: 30.0             # 전방 판단 각도창
+
+  # 주기적 제자리 회전 스캔 (RTAB-Map 이 주변을 담도록)
+  spin_scan_period: 25.0            # 초마다 한 번
+  spin_scan_duration: 12.0          # 제자리 360도 스윕에 쓰는 시간(초)
+  spin_scan_w: 0.5                  # 스핀 속도(저속)
