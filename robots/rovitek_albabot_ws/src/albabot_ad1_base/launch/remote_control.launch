@@ -1,0 +1,21 @@
+<launch>
+
+    <arg name="joy_dev" value="/dev/input/js0"/>
+    <arg name="albabot_port" value="/dev/ttyUSB-Albabot"/>
+    <arg name="albabot_baud" value="921600"/>
+
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+        <param name="baud" value="$(arg albabot_baud)" />
+        <param name="port" value="$(arg albabot_port)" />
+    </node>
+
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+    </node>
+
+    <node pkg="albabot_ad1_base" type="joy_teleop" name="joy_teleop" output="screen"/>
+
+
+
+</launch>

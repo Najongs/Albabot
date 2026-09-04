@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="ad1_sensor" type="agv_odom" name="agv_odom" output="screen"/>
+    <include file="$(find ad1_driving)/launch/driving_m1.launch" >
+    </include>
+</launch>

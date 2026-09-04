@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=gnome-terminal -e "abc.bash"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[ko_KR]=abc
+Name=abc
+Comment[ko_KR]=abc
+Comment=abc

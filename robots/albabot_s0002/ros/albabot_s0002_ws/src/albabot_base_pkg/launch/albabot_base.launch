@@ -1,0 +1,35 @@
+<launch>
+
+    <!-- robot platform 에 배치된 제어기(RPI, UP, NUC 등)에 포팅되는 런치파일.-->
+
+    <!--node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" >
+        <param name="serial_port"         type="string" value="/dev/rplidar"/>
+        <param name="serial_baudrate"     type="int"    value="115200"/>
+        <param name="frame_id"            type="string" value="base_scan"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+    </node-->
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+          <param name="baud" value="921600" />
+          <param name="port" value="/dev/ttyUSB-Albabot" />
+          <param name="port" value="/dev/ttyUSB0" />
+    </node>
+
+    <!--
+        1) robot으로 부터 전송된 센서데이터를 가공하여 오도매트리 메시지를 publish .
+        2) Hall2can, sonic2can 센서의 값을 플랫폼제어기로 부터 받아 publish .
+
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
+        <arg name="port" value="8080"/>
+    </include>
+
+    <node name="albabot_sensor_node" pkg="albabot_base_pkg" type="albabot_sensor_node" />
+    <node name="albabot_tf" pkg="albabot_base_pkg" type="albabot_tf"  />
+    <node name="albabot_ui_socket" pkg="albabot_base_pkg" type="albabot_ui_socket" />
+-->
+</launch>
+
+
+

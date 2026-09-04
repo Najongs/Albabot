@@ -1,0 +1,44 @@
+<launch>
+
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="align_depth" value="true"/>
+        <arg name="unite_imu_method" value="linear_interpolation"/>
+        <arg name="enable_gyro" value="true"/>
+        <arg name="enable_accel" value="true"/>
+        <arg name="filters" value="pointcloud"/>
+    </include>
+
+    <node pkg="web_video_server" type="web_video_server" name="web_video_server">
+        <rosparam>
+            port: 8080
+            width: 640
+            height: 480
+            quality: 10
+            default_transport: compressed
+        </rosparam>
+    </node>
+
+
+    <!--include file="$(find turtlebot3_gazebo)/launch/turtlebot3_world.launch">
+    </include-->
+
+
+    <include file="$(find turtlebot3_navigation)/launch/turtlebot3_navigation.launch">
+        <arg name="map_file" value="/home/swpark/map.yaml"/>
+    </include>
+
+    <!--include file="$(find turtlebot3_slam)/launch/turtlebot3_slam.launch">
+        <arg name="slam_methods" value="gmapping"/>
+    </include-->
+
+    <!--include file="$(find turtlebot3_teleop)/launch/turtlebot3_teleop_key.launch">
+    </include-->
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
+        <arg name="port" value="9090"/>
+    </include>
+
+    <node pkg="tf2_web_republisher" type="tf2_web_republisher" name="tf2_web_republisher"/>
+
+
+</launch>

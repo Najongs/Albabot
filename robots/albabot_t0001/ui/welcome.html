@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <style>
+            body{
+                background-color: black;
+            }
+            #greeting_view{
+                position: absolute;
+                top:50%;
+                left:50%;
+                width: 1200px;
+                height: 800px;
+                margin-top: -400px;
+                margin-left: -600px;            
+
+                max-width: 100%;
+                max-height: 100%;
+
+                animation-name: bird;
+                animation-duration: 3s;
+                animation-timing-function: linear;
+                animation-iteration-count: infinite;
+            }    
+
+            @keyframes bird {
+                0%   {background-image:  url("./img/normal_smile/SM1.png");}                  
+                25%   {background-image:  url("./img/normal_smile/SM2.png");}                  
+                50%   {background-image:  url("./img/normal_smile/SM3.png");}                  
+                75%   {background-image:  url("./img/normal_smile/SM5.png");}                  
+                100%   {background-image:  url("./img/normal_smile/SM6.png");}                  
+            }
+
+            @keyframes bird1 {
+                0%   {background-image:  url("./img/obstacle/SP0.png");}                  
+                50%   {background-image:  url("./img/obstacle/SP1.png");}                  
+                10%   {background-image:  url("./img/obstacle/SP2.png");}                  
+                /*25%   {background-image:  url("./img/normal_smile/SM2.png");}                  
+                50%   {background-image:  url("./img/normal_smile/SM3.png");}                  
+                75%   {background-image:  url("./img/normal_smile/SM5.png");}                  
+                100%   {background-image:  url("./img/normal_smile/SM6.png");}                  */
+            }
+
+        </style>
+
+    </head>
+
+    <body>  
+
+        
+        
+        <div id="greeting_view">
+            <p>park</p>
+        </div>
+
+    </body>
+
+
+
+
+    <script src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+    <script src="http://static.robotwebtools.org/roslibjs/current/roslib.js"></script>
+    <script src="http://static.robotwebtools.org/ros3djs/current/ros3d.js"></script>
+    <script>
+        window.onload=function()
+        //function init()
+        {
+            var ros = new ROSLIB.Ros({
+                //url : 'ws://localhost:9090'
+                url : 'ws://192.168.1.253:9090'
+            });
+
+            ros.on('connection', function() { 
+                console.log('Connected to websocket server.');
+            });
+
+            function sendTopic(status)
+            {
+                var albabotMsg = new ROSLIB.Topic({
+                    ros : ros,
+                    name : '/AlbabotMessage',
+                    messageType : 'albabot_msgs/CanMsg'
+                }); 
+
+                var data=new Array(3);
+                data[0]=0x00;
+                data[1]=0x85;
+                data[2]=status;
+                
+                var commadMsg = new ROSLIB.Message({
+                    id: 0x100, 
+                    dlc : 3, 
+                    data : data//[data[0],data[1],data[2]]
+                });
+                
+                albabotMsg.publish(commadMsg);
+
+                delete data;
+            }
+            
+            var elem;
+
+            document.getElementById("greeting_view").addEventListener("click",function(e){
+                console.log("click");
+                
+                elem=document.getElementById("greeting_view");
+                elem.style.animationName="bird1";
+                
+                console.log(elem.style.animationName);
+                sendTopic(0x01);
+            });
+
+
+            var topicRobotInfo=new ROSLIB.Topic({
+                ros : ros,
+                name : '/robot_info',
+                messageType : 'albabot_msgs/RobotInfo'
+            });  
+        
+            var preEncLeft;
+            var preEncRight;
+
+            topicRobotInfo.subscribe(function(message)
+            {
+                var vel1, vel2;
+                vel1=message.left_enc-preEncLeft;
+                vel2=message.right_enc-preEncRight;
+
+                // 1. 주행중인지 확인
+                /*if( Math.abs(vel1+vel2/2.0)<5.0)
+                    console.log("stop | " + "v_l : " + vel1 + "v_r : " + vel2);
+                else
+                    console.log("on driving | " + "v_l : " + vel1 + "v_r : " + vel2);*/
+                preEncLeft=message.left_enc;
+                preEncRight=message.right_enc;
+
+                // 2. 배터리 확인
+                var voltage=(message.batVoltage-3020)/((3840-3020)/6.0) + 22.0;
+                //console.log("배터리전압 : " + voltage);
+
+
+                
+                if(voltage<25.0)
+                    document.getElementById("greeting_view").style.animationName="bird1";
+                                    //console.log(document.getElementById("greeting_view").);
+                        
+            })
+        }
+        
+    </script>
+</html>

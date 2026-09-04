@@ -1,0 +1,28 @@
+<launch>
+    <!--
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" >
+        <param name="video_device" value="/dev/video2" />
+        <param name="image_width" value="1920" />
+        <param name="image_height" value="1080" />
+        <param name="pixel_format" value="yuyv" />
+        <param name="camera_frame_id" value="usb_cam" />
+        <param name="autofocus" value="false"/>
+        <param name="io_method" value="mmap"/>
+        <param name="framerate" value="10"/>
+    </node>
+
+    <include file="$(find aruco_detect)/launch/aruco_detect.launch">
+        <arg name="camera" value="usb_cam"/>
+        <arg name="image" value="image_raw"/>
+    </include>
+
+
+    <include file="$(find fiducial_slam)/launch/fiducial_slam.launch">
+        <arg name="odom_frame" value="odom"/>
+        <arg name="base_frame" value="base_link"/>
+    </include>
+-->
+
+    <node pkg="albabot_ad1_pkg" type="ad1_tf" name="ad1_tf" />
+
+</launch>

@@ -1,0 +1,56 @@
+<launch>
+    <arg name="joy_dev" value="/dev/input/js0"/>
+    <arg name="albabot_port" value="/dev/ttyUSB-Albabot"/>
+    <arg name="albabot_baud" value="921600"/>
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+        <param name="baud" value="$(arg albabot_baud)" />
+        <param name="port" value="$(arg albabot_port)" />
+    </node>
+
+
+
+    <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" >
+        <param name="serial_port"         type="string" value="/dev/rplidar"/>
+        <param name="serial_baudrate"     type="int"    value="115200"/>
+        <param name="frame_id"            type="string" value="base_scan"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+    </node>
+
+    <node name="agv_lidar_obstacle" pkg="albabot_ad1_base" type="agv_lidar_obstacle"/>
+
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+    </node>
+
+    <node pkg="albabot_ad1_base" type="agv_joystick" name="agv_joystick">
+        <param name="next_btn_idx" value="0"/>
+        <param name="mode_btn_idx" value="6"/>
+        <param name="left_btn_idx" value="2"/>
+        <param name="right_btn_idx" value="3"/>
+        <param name="turn_btn_idx" value="1"/>
+        <param name="cancel_btn_idx" value="5"/>
+
+        <param name="v_axis_idx" value="1"/>
+        <param name="w_axis_idx" value="3"/>
+        <param name="scale_idx" value="2"/>
+        <param name="aux_v_axis_idx" value="5"/>
+        <param name="aux_w_axis_idx" value="4"/>
+
+    </node>
+
+    <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>
+
+    <!--node name="t1" pkg="albabot_ad1_a" type="agv_driving_m1" output="screen">
+        <param name="sound_home" value="/opt/albabot/sound/"/>
+        <param name="period" value="20.0"/>
+    </node>
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
+        <arg name="port" value="8080"/>
+    </include-->
+
+
+
+</launch>

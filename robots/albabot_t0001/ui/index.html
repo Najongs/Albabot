@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+    <meta charset="utf-8" />
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+ 
+    <script type="text/javascript" src="http://static.robotwebtools.org/EaselJS/current/easeljs.min.js"></script>
+    <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+    
+
+    <script src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    <script src="http://static.robotwebtools.org/threejs/current/three.min.js"></script>
+    <script src="http://static.robotwebtools.org/ros2djs/current/ros2d.min.js"></script>
+    <script src="http://static.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+
+    <script type="text/javascript" src="js/telebot_ros.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/selectPage.js"></script>
+    <script type="text/javascript" src="js/remotePage.js"></script>
+    <script type="text/javascript" src="js/autonomousPage.js"></script>
+    <script type="text/javascript" src="js/configurationPage.js"></script>
+
+  </head>
+
+    <body>
+        <div class="wrapper"> 
+            <div class="top_panel">
+                <img id="img-wifi" src="img/icon/wifi0.png">
+                <img id="img-batStatus" src="img/icon/battery1.png">
+            </div>           
+
+            <div class="main-panel">        
+                <nav>
+                <ul>
+                    <li><button id="btnRemote">Remote</button></li>
+                    <li><button id="btnAutonomous">Autonomous</button></li>
+                    <li><button id="btnConfiguration">Configuration</button></li>
+                </ul>
+                </nav>
+            </div>
+
+        <div class="content">
+            <div class="content-remote" id="content-remote" style="display: block;">
+            <ul>
+                <li>
+                <div style="width: 200px; height: 20px;margin-top: 50px;">
+                    <img src="">
+                </div>
+                
+                <div class="remote-video">
+                    <img id="left_stream1" style='height: 100%; width: 100%; object-fit: contain' src="">
+                </div>
+                </li>
+
+                <li>
+                <div style="width: 200px; height: 20px;margin-top: 50px;">
+                    
+                    <img src="">                
+                </div>
+                <div class="thermal-map" id="thermal-map">
+                    <img id="thermal_stream" style='height: 100%; width: 100%; object-fit: contain' src="">
+                </div>
+
+                
+                <div class="remote-map" id="remote-map" style="display: none;">
+                </div>
+
+                </li>
+            </ul>
+            </div>
+
+            <div class="content-autonomous" id="content-autonomous">
+            <p>park2</p>
+            </div>
+
+            <div class="content-configuration" id="content-configuration">
+                <button id=btnConfig_status1>Robot Status1</button>
+                <button id=btnConfig_status2>Robot Status2</button>
+                <button id=btnConfig_status3>Robot Status3</button>
+                <button id=btnConfig_status4>Robot Status4</button>
+            </div>
+
+        </div>
+
+        <footer class="footer">
+            <img src="img/icon/LOGO(354x704).png">
+        </footer>
+
+        </div>
+    </body>
+
+
+</html>

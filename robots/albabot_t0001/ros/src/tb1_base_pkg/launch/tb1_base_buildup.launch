@@ -1,0 +1,80 @@
+<launch>
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="align_depth" value="true"/>
+        <arg name="unite_imu_method" value="linear_interpolation"/>
+        <arg name="enable_gyro" value="true"/>
+        <arg name="enable_accel" value="true"/>
+        <arg name="filters" value="pointcloud"/>
+    </include>
+
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+      <remap from="cloud_in" to="/camera/depth/color/points"/>
+      <remap from="scan" to="/scan" />
+      <rosparam>
+        target_frame: camera_link
+        transform_tolerance: 0.01
+        min_height: -1.0
+        max_height: 1.0
+
+        angle_min: -0.7854
+        angle_max: 0.7854
+        angle_increment: 0.0087l
+        scan_time: 0.03333
+        range_min: 0.25
+        range_max: 4.0
+        use_inf: true
+
+        #concurrency_level affects number of pc queued for processing and the number of threadsused
+        # 0: Detect number of cores
+        # 1: Single threaded
+        # 2: inf : Parallelism level
+        concurrency_level: 1
+      </rosparam>
+    </node>
+
+    <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_node">
+        <remap from="/imu/data_raw" to="/camera/imu"/>
+        <remap from="/imu/data" to="/rtabmap/imu"/>
+
+        <rosparam>
+            use_mag: false
+            publish_tf: false
+            world_frame: enu
+        </rosparam>
+    </node>
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
+        <arg name="port" value="9090"/>
+    </include>
+
+    <node pkg="tf2_web_republisher" type="tf2_web_republisher" name="tf2_web_republisher" />
+    <node pkg="web_video_server" type="web_video_server" name="web_video_server">
+        <rosparam>
+            width: 640
+            height: 480
+            quality: 10
+            default_transport: compressedl
+        </rosparam>
+    </node>
+
+    <!--arg name="joy_dev" value="/dev/input/js0"/>
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+        <param name="autorepeat_rate" value="0"/>
+    </node-->
+
+    <node name="gen_vel_node" pkg="tb1_base_pkg" type="gen_vel_node">
+    </node>
+
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+          <param name="baud" value="921600" />
+          <param name="port" value="/dev/ttyUSB-Albabot" />
+          <param name="port" value="/dev/ttyUSB0" />
+    </node>
+
+    <!--node pkg="tf2_ros" type="static_transform_publisher" name="map_to_camera_link" args="-0.0 -0.0 2.0 0.0 0.0 0.0 /map /camera_link" />
+    <node pkg="tf" type="static_transform_publisher" name="map_to_camera_link" args="-0.0 -0.0 2.0 0.0 0.0 0.0 /base_footprint /base_scan 100" /-->
+
+</launch>
+

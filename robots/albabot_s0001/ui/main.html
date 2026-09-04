@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+
+        <style>
+            .page_setting > .clsDivBtn{background-color: rgb(163, 121, 135);}
+            .page_setting > .clsDivView{background-color: blueviolet;}
+            .page_setting > .clsDivView > .clsDivView_Map{background-color: red;}
+            .page_setting > .clsDivView > .clsDivView_Map{background-color: green;}
+            .page_setting > .clsDivBtn{width:600px;height: 50px;};
+            .page_setting > .clsDivBtn > button{width:150px;height: 30px;};
+
+        </style>
+
+        <link rel="stylesheet" type="text/css" href="css/loadingPage.css"> 
+
+        <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+        <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+        <script type="text/javascript" src="js/ros.js"></script>
+        <script type="text/javascript" src="js/subscribeTest.js"></script>
+        <script type="text/javascript" src="js/subRobotInfo.js"></script>
+        <script type="text/javascript" src="js/loadingPage.js"></script>
+        <script type="text/javascript" src="js/operatingPage.js"></script>
+        <script type="text/javascript" src="js/settingPage.js"></script>
+        <script type="text/javascript" src="js/selectPage.js"></script>
+        <script type="text/javascript" src="js/settingPage_Drive.js"></script>        
+        <script type="text/javascript" src="js/settingPage_Url.js"></script>  
+        <script type="text/javascript" src="js/selectTablePage.js"></script>    
+        <script type="text/javascript" src="js/drawMap.js"></script>    
+            
+
+        <script type="text/javascript" src="js/main.js"></script>
+
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="selectPage" style="display:none">
+                <button id="btnSelectorLoad">Loading</button>
+                <button id="btnSelectorOperate">Operating</button>
+                <button id="btnSelectorSet">Setting</button>
+            </div>
+
+            <div class="page_loading" id="idPageLoading">  
+                <div class="mainContainer">             
+                    <p>URL <br><input id="inputIdUrl" type="text" value="ws://albabot.ddns.net:8080"></input></p>
+                    <p>USer <br><input type="text"></input></p>
+                    <p>Password <br><input type="password"></input></p> 
+                    <p align="center"><button id="btnIdConnection">Connection</button></p>            
+                </div>
+            </div>
+
+            <div class="page_operating" id="idPageOperating">
+                <p id="pIdTest"></p>
+
+                <div style="text-align:center">
+                    <canvas id="canvas" width="500" height="500"></canvas>
+                </div>
+                
+            </div>
+
+            <div class="page_setting" id="idPageSetting">
+                <p>page_setting</p> 
+                <div class="clsDivBtn">                    
+                    <button id="btnIdMap">MapView</button>
+                    <button id="btnIdDrive">Drive</button>
+                    <button id="btnIdParam">Param</button>
+                    <button id="btnIdUrl">Url</button>
+                    <button id="btnIdSendPath">Url</button>
+
+                </div>
+
+                <div class="clsDivView">
+                    <div class="clsDivView_Map"  id="idPageSettingViewMap">  
+
+                        <p>idPageSettingViewMap</p>                     
+                    </div>
+
+                    <div class="clsDivView_Drive" id="idPageSettingViewDrive">   
+                        <p>idPageSettingViewDrive</p>                      
+                        <div id="divIdDriveRobotInfo"></div>
+                    </div>
+
+                    <div class="clsDivView_Param"  id="idPageSettingViewParam">                                                
+                        <p>idPageSettingViewParam</p> 
+                    </div>
+
+                    <div class="clsDivView_Url"  id="idPageSettingViewUrl">                        
+                        <p>idPageSettingViewUrl</p> 
+                        <div class="clsDivBtn">   
+                            <button id="btnIdAddNext">Add Next</button>
+                            <button id="btnIdAddLeft">Add Left</button>
+                            <button id="btnIdAddRight">Add Right</button>
+                            <button id="btnIdAddTurn">Add Turn</button>
+                        </div>
+                        <input type="text" id="inputPathString"></input>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

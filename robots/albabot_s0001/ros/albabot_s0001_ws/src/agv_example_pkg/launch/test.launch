@@ -1,0 +1,3 @@
+<launch>
+    <node name="example1" pkg="agv_example_pkg" type="ex1_node" output="screen"/>
+</launch>

@@ -1,0 +1,32 @@
+<launch>
+    <!--
+    <arg name="joy_dev" value="/dev/input/js0"/>
+
+    <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" >
+        <param name="serial_port"         type="string" value="/dev/rplidar"/>
+        <param name="serial_baudrate"     type="int"    value="115200"/>
+        <param name="frame_id"            type="string" value="base_scan"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+    </node>
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+          <param name="baud" value="921600" />
+          <param name="port" value="/dev/ttyUSB-Albabot" />
+    </node>
+
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+    </node>
+
+    <node pkg="albabot_ad1_pkg" type="ad1_sensor" name="ad1_sensor" />
+    <node pkg="albabot_ad1_pkg" type="joy_teleop" name="joy_teleop" output="screen"/>
+    <node pkg="albabot_ad1_pkg" type="ad1_tf" name="ad1_tf" />
+    <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>
+    <node name="ad1_sound" pkg="albabot_ad1_pkg" type="ad1_sound"/>
+
+    -->
+    <node pkg="albabot_ad1_pkg" type="ad1_tf" name="ad1_tf" />
+    <node pkg="albabot_ad1_pkg" type="ad1_sensor" name="ad1_sensor" />
+</launch>
+

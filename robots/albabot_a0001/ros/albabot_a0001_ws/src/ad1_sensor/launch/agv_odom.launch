@@ -1,0 +1,48 @@
+<launch>
+    <!--node pkg="ad1_sensor" type="agv_odom" name="agv_odom" output="screen"/>
+    <include file="$(find ad1_driving)/launch/driving_m1.launch" >
+    </include-->
+
+
+    <node name="test_rviz" pkg="rviz" type="rviz" args="-d $(find ad1_navigation)/rviz/ad1_realsense.rviz" />
+
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="filters" value="pointcloud"/>
+    </include>
+
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+      <remap from="cloud_in" to="/camera/depth/color/points"/>
+      <!--remap from="scan" to="/camera/scan" /-->
+      <remap from="scan" to="/scan2" />
+      <rosparam>
+        target_frame: camera_link
+        transform_tolerance: 0.01
+        min_height: -1.0
+        max_height: 1.0
+
+        angle_min: -0.7854
+        angle_max: 0.7854
+        angle_increment: 0.0087
+        scan_time: 0.03333
+        range_min: 0.25
+        range_max: 4.0
+        use_inf: true
+
+        #concurrency_level affects number of pc queued for processing and the number of threadsused
+        # 0: Detect number of cores
+        # 1: Single threaded
+        # 2: inf : Parallelism level
+        concurrency_level: 1
+      </rosparam>
+    </node>
+
+
+    <node pkg="ad1_sensor" type="lidar_merge" name="lidar_merge" output="screen">
+        <remap from="/scan1" to="/scan2"/>
+    </node>
+
+
+
+
+
+</launch>

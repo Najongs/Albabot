@@ -1,0 +1,3 @@
+var remotePage={};
+remotePage.divMain;
+

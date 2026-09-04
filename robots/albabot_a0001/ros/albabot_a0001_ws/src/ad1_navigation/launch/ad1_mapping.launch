@@ -1,0 +1,10 @@
+<launch>
+    <node name="test_rviz" pkg="rviz" type="rviz" args="-d $(find ad1_navigation)/rviz/test01.rviz" />
+
+    <node pkg="gmapping" type="slam_gmapping" name="gmapping">
+        <param name="base_frame" value="base_footprint"/>
+        <param name="odom_frame" value="odom" />
+        <param name="delta" value="0.1" />
+    </node>
+
+</launch>

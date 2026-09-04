@@ -1,0 +1,6 @@
+<launch>
+    <!---->
+    <node name="test_node" pkg="albabot_msgs" type="test_node"  output="screen"/>
+
+
+</launch>

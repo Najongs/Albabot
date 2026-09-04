@@ -1,0 +1,77 @@
+<launch>
+
+    <!--arg name="joy_dev" value="/dev/input/js0"/>
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+    </node-->
+
+    <!--arg name="joy_type_wireless" value="0"/>
+    <arg name="agv_velocity" value="1.0"/>
+    <arg name="agv_kp" value="0.3"/>
+    <arg name="agv_ki" value="0.0"/>
+    <arg name="agv_kd" value="1.5"/>
+    <arg name="agv_gearratio" value="30"/>
+    <arg name="agv_w2wDist" value="0.375"/>
+    <arg name="agv_acc" value="3.3"/>
+
+    <node pkg="ad1_driving" type="driving_m1" name="driving_m1" output="screen" >
+        <param name="joy_type" value="$(arg joy_type_wireless)"/>
+        <param name="agv_velocity" value="$(arg agv_velocity)"/>
+        <param name="agv_kp" value="$(arg agv_kp)"/>
+        <param name="agv_ki" value="$(arg agv_ki)"/>
+        <param name="agv_kd" value="$(arg agv_kd)"/>
+        <param name="agv_gearratio" value="$(arg agv_gearratio)"/>
+        <param name="agv_w2wDist" value="$(arg agv_w2wDist)"/>
+        <param name="agv_acc" value="$(arg agv_acc)"/>
+    </node-->
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+          <param name="baud" value="921600" />
+          <param name="port" value="/dev/ttyUSB-Albabot" />
+    </node>
+
+    <node name="gen_vel_node" pkg="tb1_base_pkg" type="gen_vel_node" output="screen">
+    </node>
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
+        <arg name="port" value="9090"/>
+    </include>
+
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+        <param name="video_device" value="/dev/video_thermal" />
+        <param name="image_width" value="160" />
+        <param name="image_height" value="120" />
+        <param name="pixel_format" value="uyvy" />
+        <!--param name="camera_frame_id" value="usb_cam" />
+        <param name="camera_info_url" value="file:///home/swpark/.ros/camera_info/logitech_c920_camera.yaml" />
+        <param name="camera_info_url" value="file://$(find ad1_navigation)/camera_info/logitech_c920_camera.yaml" /-->
+        <param name="io_method" value="userptr"/>
+    </node>
+
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <!--arg name="color_fps" value="15"/>
+        <arg name="filters" value="pointcloud"/-->
+
+        <arg name="align_depth" value="true"/>
+        <arg name="unite_imu_method" value="linear_interpolation"/>
+        <arg name="enable_gyro" value="true"/>
+        <arg name="enable_accel" value="true"/>
+
+    </include>
+
+    <node pkg="web_video_server" type="web_video_server" name="web_video_server">
+        <rosparam>
+            width: 640
+            height: 480
+            quality: 10
+            default_transport: compressed
+        </rosparam>
+    </node>
+
+    <node pkg="image_transport" type="republish" name="republish" args="raw in:=usb_cam/image_raw compressed out:=thermal/image">
+    </node>
+
+    <node pkg="tf2_web_republisher" type="tf2_web_republisher" name="tf2_web_republisher" />
+
+
+</launch>

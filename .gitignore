@@ -1,0 +1,28 @@
+# ROS(catkin) 빌드 산출물
+build/
+devel/
+install/
+logs/
+.catkin_tools/
+
+# 에디터/IDE 잔여물
+*.workspace.user*
+.vscode/
+*.autosave
+
+# 파이썬
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+
+# 대용량 백업 스냅샷(소스 아님) — 필요시 개별 예외 처리
+*.zip
+!robots/albabot_t0001/fw/Adafruit_NeoPixel-master.zip
+
+# 터널 세팅 실행 로그(공개키/엔드포인트 포함)
+ops/실행결과.txt
+
+# 로컬 전용: 미니 PC 터널 세팅 (공인 엔드포인트 포함, 공개 저장소 제외)
+ops/

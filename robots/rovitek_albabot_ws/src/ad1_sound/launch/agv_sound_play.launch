@@ -1,0 +1,10 @@
+<launch>
+    <node name="soundplay_node" pkg="sound_play"    type="soundplay_node.py"/>
+
+
+    <node name="sound_player"   pkg="ad1_sound"     type="agv_sound"  output="screen">
+        <param name="sound_home" value="./albabot_ad1/sound/"/>
+        <param name="period" value="20.0"/>
+    </node>
+
+</launch>

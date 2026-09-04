@@ -1,0 +1,46 @@
+<launch>
+    <!--
+    <node pkg="ad1_mapping" type="ad1_mapping" name="ad1_mapping" output="screen"/>
+    <node pkg="ad1_mapping" type="node_gen" name="node_gen" output="screen"/>
+
+    <arg name="albabot_port" value="/dev/ttyUSB0"/>
+    <arg name="albabot_baud" value="921600"/>
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+        <param name="baud" value="$(arg albabot_baud)" />
+        <param name="port" value="$(arg albabot_port)" />
+    </node>
+
+    <include file="$(find ad1_driving)/launch/driving_m1.launch" >
+    </include>-->
+
+    <!--
+    <node pkg="ad1_mapping" type="odom_gen" name="odom_gen" output="screen"/>
+    <node pkg="ad1_mapping" type="node_display" name="node_display" output="screen"/>
+
+    <node name="ad1_mapping_rviz" pkg="rviz" type="rviz" args="-d $(find ad1_mapping)/rviz/ad1_mapping.rviz" />
+
+    <include file="$(find ad1_driving)/launch/driving_m1.launch" >
+    </include>
+    -->
+
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+       <param name="video_device" value="/dev/video0" />
+       <param name="image_width" value="1280" />
+       <param name="image_height" value="720" />
+       <!--param name="pixel_format" value="mjpeg" />
+       <param name="camera_frame_id" value="head_camera" />
+       <param name="io_method" value="mmap"/-->
+    </node>
+
+    <node name="web_video1" pkg="web_video_server" type="web_video_server" >
+        <param name="default_transport" value="/usb_cam/image_raw"/>
+        <param name="port" value="8080" />
+    </node>
+
+<!--node name="webrtc1" pkg="webrtc_ros" type="webrtc_ros_server_node" >
+    <param name="image_transport" value="/usb_cam/image_raw"/>
+    <param name="port" value="8080" />
+</node-->
+
+</launch>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>900</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#pushButton_Bottom
+{
+	background-color:transparent;
+	border-image:url(:/images/bottom_arrow_nomal640.png);
+	background:none;
+	border:none;
+	background-repeat:none;
+}
+
+#pushButton_Bottom:pressed
+{
+	border-image:url(:/images/bottom_arrow_click640.png);
+}
+
+#pushButton_Top
+{
+	background-color:transparent;
+	border-image:url(:/images/top_arrow_nomal640.png);
+	background:none;
+	border:none;
+	background-repeat:none;
+}
+
+#pushButton_Top:pressed
+{
+	border-image:url(:/images/top_arrow_click640.png);
+}
+
+#pushButton_Right
+{
+	background-color:transparent;
+	border-image:url(:/images/right_arrow_nomal640.png);
+	background:none;
+	border:none;
+	background-repeat:none;
+}
+
+#pushButton_Right:pressed
+{
+	border-image:url(:/images/right_arrow_click640.png);
+}
+
+#pushButton_Left
+{
+	background-color:transparent;
+	border-image:url(:/images/left_arrow_nomal640.png);
+	background:none;
+	border:none;
+	background-repeat:none;
+}
+
+#pushButton_Left:pressed
+{
+	border-image:url(:/images/left_arrow_click640.png);
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1280</width>
+      <height>900</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0,0,0);</string>
+    </property>
+    <widget class="QWidget" name="page">
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1261</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(30, 30, 30);
+font: italic 18pt &quot;Sans Serif&quot;;
+color: lightgreen;
+</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="text">
+       <string>Pipe Inspection Crawler</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>701</width>
+        <height>501</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: lightgreen;
+background-color: rgb(20, 20, 20);</string>
+      </property>
+      <property name="title">
+       <string>Transport Image</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <widget class="QLabel" name="lbView">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>30</y>
+         <width>681</width>
+         <height>461</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(0, 0, 0);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>60</y>
+        <width>531</width>
+        <height>501</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: red;
+background-color: rgb(20, 20, 20);</string>
+      </property>
+      <property name="title">
+       <string>Robot Control</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>570</y>
+        <width>1240</width>
+        <height>301</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: yellow;
+background-color: rgb(20, 20, 20);</string>
+      </property>
+      <property name="title">
+       <string>Image Analysis</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2"/>
+   </widget>
+   <widget class="QLabel" name="lbStatus">
+    <property name="geometry">
+     <rect>
+      <x>72</x>
+      <y>860</y>
+      <width>1181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

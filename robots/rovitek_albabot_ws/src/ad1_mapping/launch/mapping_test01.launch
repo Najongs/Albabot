@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="ad1_mapping" type="node_register" name="node_register" output="screen"/>
+</launch>

@@ -1,0 +1,9 @@
+
+
+
+
+.mainContainer {width: 200px; height: 280px; border-radius: 10px; border:solid gray 2px; padding: 0px; 
+    position: absolute;top:50%;left:50%; margin-left: -100px; margin-top: -140px;}
+.mainContainer > p {margin-left: 6px; font: italic bold 12px/30px Dotum, sans-serif}
+/*.mainContainer {width: 200px; height: 200px; border-color:red;  border-radius:10px;} padding : 0px 0px 0px 0px; border-width: 4px;}*/
+/*.mainContainer > input{width: 100px; height: 30px; padding : 0px 0px 0px 0px;border-width:0px; background-color:blue;}*/

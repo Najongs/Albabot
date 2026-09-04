@@ -1,0 +1,118 @@
+<launch>
+
+
+    <!--include file="$(find audio_capture)/launch/capture.launch">
+        <arg name="ns" value="robot"/>
+        <arg name="format" value="mp3"/>
+    </include-->
+
+    <!--include file="$(find audio_play)/launch/play.launch">
+        <arg name="ns" value="manager"/>
+        <arg name="do_timestamp" value="false"/>
+    </include-->
+
+    <node name="thermal_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+        <param name="video_device" value="/dev/video_thermal" />
+        <param name="image_width" value="160" />
+        <param name="image_height" value="120" />
+        <param name="pixel_format" value="uyvy" />        
+        <param name="io_method" value="userptr"/>
+    </node>
+
+    <!--node name="usb_cam" pkg="cv_camera" type="cv_camera_node" output="screen" >
+        <param name="rate" value="30" />
+        <param name="device_id" value="0" />        
+        <param name="image_height" value="480" />
+        <param name="camera_frame_id" value="usb_cam" />        
+    </node-->
+
+
+    <!--include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="serial_no" value="934222071735"/>
+        <arg name="camera" value="front_camera"/>
+        <arg name="filters" value="pointcloud"/>
+        <arg name="align_depth" value="true"/>
+        <arg name="unite_imu_method" value="linear_interpolation"/>
+        <arg name="enable_gyro" value="false"/>
+        <arg name="enable_accel" value="false"/>
+    </include-->
+
+    <!--node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+      <remap from="cloud_in" to="/front_camera/depth/color/points"/>
+      <remap from="scan" to="/front_camera/scan" />
+      <rosparam>
+        target_frame: camera_link
+        transform_tolerance: 0.01
+        min_height: -1.0
+        max_height: 1.0
+
+        angle_min: -0.7854
+        angle_max: 0.7854
+        angle_increment: 0.0087
+        scan_time: 0.03333
+        range_min: 0.25
+        range_max: 4.0
+        use_inf: true
+
+        #concurrency_level affects number of pc queued for processing and the number of threadsused
+        # 0: Detect number of cores
+        # 1: Single threaded
+        # 2: inf : Parallelism level
+        concurrency_level: 1
+      </rosparam>
+    </node-->
+
+    <node pkg="tf" type="static_transform_publisher" name="base_link_to_d435" args="0.0 0.0 0.0 0.0 0.0 0.0 /front_camera_depth_frame /camera_link 40" />
+
+
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="enable_color" value="true"/>
+        <arg name="camera" value="head_camera"/>
+        <arg name="serial_no" value="014122070972"/>
+        <arg name="color_fps" value="15"/>
+
+        <!--arg name="filters" value="pointcloud"/>
+        <arg name="align_depth" value="true"/>
+        <arg name="unite_imu_method" value="linear_interpolation"/>
+        <arg name="enable_gyro" value="true"/>
+        <arg name="enable_accel" value="true"/-->
+
+    </include>
+
+    <!--node pkg="qtHello" type="qtHello" name="qtHello" /-->
+    <node pkg="qtRobot" type="qtRobot" name="qtRobot"/>
+
+
+    <node pkg="tb2_base_pkg" type="head_controller" name="head_controller" output="screen">
+        <param name="dxl1_centroid" value="490"/>
+        <param name="dxl2_centroid" value="450"/>
+        <param name="port" value="/dev/ttyUSB-Head"/>
+    </node>
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+         <param name="baud" value="921600" />
+         <param name="port" value="/dev/ttyUSB-Albabot" />
+    </node>
+
+    <node name="gen_vel_node" pkg="tb2_base_pkg" type="gen_vel_node">
+    </node>
+    <!--node pkg="tb2_base_pkg" type="joy2vel" name="joy2vel">
+        <remap from="/joy1" to="/joy" />
+    </node-->
+
+    <node pkg="image_transport" type="republish" name="img_republish"
+        args="compressed in:=/manager_cam/image_raw raw out:=/manager_cam_re/image_raw"/>
+
+
+    <include file="$(find audio_capture)/launch/capture.launch">
+        <arg name="ns" value="robot"/>
+        <arg name="sample_rate" value="8000"/>
+    </include>
+
+    <arg name="joy_dev" value="/dev/input/js0"/>
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+        <!--param name="autorepeat_rate" value="0.1"/-->
+    </node>
+
+</launch>

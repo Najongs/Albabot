@@ -1,0 +1,26 @@
+<launch>
+
+    <arg name="joy_dev" value="/dev/input/js0"/>
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+        <!--param name="autorepeat_rate" value="0.1"/-->
+    </node>
+
+
+    <node pkg="tb2_base_pkg" type="head_controller" name="head_controller" output="screen">
+        <param name="dxl1_centroid" value="512"/>
+        <param name="dxl2_centroid" value="456"/>
+        <param name="port" value="/dev/ttyUSB_Head"/>
+    </node>
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+         <param name="baud" value="921600" />
+         <param name="port" value="/dev/ttyUSB-Albabot" />
+   </node>
+
+    <node name="gen_vel_node" pkg="tb2_base_pkg" type="gen_vel_node">
+    </node>
+
+
+
+</launch>

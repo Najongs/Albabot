@@ -1,0 +1,19 @@
+<launch>
+    <!--include file="$(find turtlebot3_gazebo)/launch/turtlebot3_world.launch">
+    </include-->
+
+    <arg name="joy_dev" value="/dev/input/js0"/>
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+        <!--param name="autorepeat_rate" value="0.1"/-->
+    </node>
+
+    <node pkg="tb2_base_pkg" type="joy2vel" name="joy2vel">
+        <remap from="/joy1" to="/joy" />
+    </node>
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
+        <arg name="port" value="9090"/>
+    </include>
+
+</launch>

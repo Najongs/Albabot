@@ -1,0 +1,17 @@
+<launch>
+<!--
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+          <param name="baud" value="921600" />
+          <param name="port" value="/dev/ttyUSB-AD1" />
+    </node>
+-->
+    <arg name="port" value="3456"/>
+
+    <node name="agv_lidar_obstacle" pkg="albabot_ad1_base" type="agv_lidar_obstacle"/>
+
+
+    <node name="ad1_ui_socket" pkg="ad1_socket" type="ad1_ui_socket" output="screen">
+        <param name="port" value="$(arg port)"/>
+    </node>
+
+</launch>

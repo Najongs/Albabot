@@ -1,0 +1,130 @@
+body {
+    background-color: black;
+    
+}
+
+.wrapper{
+    border: 2px solid #5d5d5d;
+    position: absolute;
+    width: 1200px;
+    height: 800px;
+    margin: -400px 0px 0px -600px;
+    top:50%;
+    left:50%;
+}
+
+.top_panel{
+    width: 1200px;
+    height: 35px;
+    margin: 0px;
+    float: right;
+    text-align: right;
+    background-color:black;
+    border-width: 0px;
+}
+
+.top_panel > img{
+    vertical-align: middle;
+}
+
+.main-panel{
+    width: 1200px;
+    height: 65px;
+    margin:0px;
+    float: left;
+    text-align: center;
+    background-color: black;
+
+    border-width: 0px;
+}
+.main-panel ul li{
+    display: inline-block;
+    text-align: center;
+    background-color:black;
+    list-style: none;
+    border-width: 0px;
+}
+
+.main-panel button{
+    width: 350px;
+    height: 49px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "Trebuchet MS", Dotum, Arial;
+
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-width: 0px;
+
+    background-color: #262626;
+}
+
+.main-panel button:link{
+    display:block;
+    color:#35474F;
+    background-color: #262626;     
+    border-width: 0px;
+}
+.main-panel button:hover{
+    background-color:  #35474F;
+    color:white;
+    border-width: 0px;
+}
+
+.content{
+    width: 1200px;
+    height: 734px;
+    background-color: #35474F;
+    border-width: 0px;
+}
+
+.content ul li{
+    float:left;
+    list-style: none;
+}
+
+.footer{
+    width: 1200px;
+    height: 44px;
+    text-align: center;
+    background-color: black;
+}
+
+.remote-video{
+    width: 640px;
+    height: 480px;
+    width: 100%;
+    height: 100%;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-left: 0px;
+    float : left;
+    
+    /*position:absolute;
+    left: 0px;
+    top:0px;
+    margin: 0 auto;
+    min-width: 320px;
+    max-width: 1280px;   
+    height: 100%;
+    width: 100%;*/
+}
+
+.remote-map{
+    width: 500px;
+    height: 400px;
+    margin-top: 10px;
+    margin-left: 10px;
+    background-color:green;
+}
+
+.thermal-map
+{
+    width: 160px;
+    height: 120px;
+    margin-top: 10px;
+    margin-left: 10px;
+
+    transform: rotate(180deg);
+
+}

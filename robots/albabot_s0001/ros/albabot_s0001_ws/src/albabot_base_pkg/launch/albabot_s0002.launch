@@ -1,0 +1,77 @@
+<launch>
+
+    <arg name="port" value="3456"/>
+    <arg name="joy_dev" value="/dev/input/js0"/>
+
+    <!--
+    조이스틱으로 로봇을 AGV 모드 또는 Remote 모드로 동작.
+    joy_dev : joystick device
+    joy_type=0(wire) 1(wireless)
+    -->
+    <!-- AD1-->
+    <!--arg name="joy_type_wireless" value="1"/>
+    <arg name="agv_velocity" value="1.6"/>
+    <arg name="agv_kp" value="0.3"/>
+    <arg name="agv_ki" value="0.0"/>
+    <arg name="agv_kd" value="4.0"/>
+    <arg name="agv_gearratio" value="50"/>
+    <arg name="agv_w2wDist" value="0.338"/>
+    <arg name="agv_acc" value="0.2"/-->
+
+    <!-- ST1-->
+    <arg name="joy_type_wireless" value="1"/>
+    <arg name="agv_velocity" value="1.0"/>
+    <arg name="agv_kp" value="0.3"/>
+    <arg name="agv_ki" value="0.0"/>
+    <arg name="agv_kd" value="1.5"/>
+    <arg name="agv_gearratio" value="30"/>
+    <arg name="agv_w2wDist" value="0.375"/>
+    <arg name="agv_acc" value="3.3"/>
+
+
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+    </node>
+
+    <node pkg="ad1_driving" type="driving_m1" name="driving_m1" output="screen" >
+        <param name="joy_type" value="$(arg joy_type_wireless)"/>
+        <param name="agv_velocity" value="$(arg agv_velocity)"/>
+        <param name="agv_kp" value="$(arg agv_kp)"/>
+        <param name="agv_ki" value="$(arg agv_ki)"/>
+        <param name="agv_kd" value="$(arg agv_kd)"/>
+        <param name="agv_gearratio" value="$(arg agv_gearratio)"/>
+        <param name="agv_w2wDist" value="$(arg agv_w2wDist)"/>
+        <param name="agv_acc" value="$(arg agv_acc)"/>
+    </node>
+
+    <node name="ad1_ui_socket" pkg="ad1_socket" type="ad1_ui_socket" output="screen">
+        <param name="port" value="$(arg port)"/>
+    </node>
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+          <param name="baud" value="921600" />
+          <param name="port" value="/dev/ttyUSB-Albabot" />
+    </node>
+
+    <node name="albabot_tf" pkg="albabot_base_pkg" type="albabot_tf"/>    
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
+        <arg name="port" value="8080"/>
+    </include>
+
+
+<!--
+    <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" >
+        <param name="serial_port"         type="string" value="/dev/rplidar"/>
+        <param name="serial_baudrate"     type="int"    value="115200"/>
+        <param name="frame_id"            type="string" value="base_scan"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+    </node>
+
+    <node name="agv_lidar_obstacle" pkg="ad1_sensor" type="agv_lidar_obstacle"/>
+-->
+    
+
+
+</launch>

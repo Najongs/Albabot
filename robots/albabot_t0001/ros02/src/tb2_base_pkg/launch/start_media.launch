@@ -1,0 +1,14 @@
+<launch>
+    <!--node pkg="image_transport" type="republish" name="img_republish"
+        args="compressed in:=/manager_cam/image_raw raw out:=/manager_cam_re/image_raw"/-->
+
+    <!--include file="$(find audio_capture)/launch/capture.launch">
+        <arg name="ns" value="robot"/>
+    </include-->
+
+    <include file="$(find audio_play)/launch/play.launch">
+        <arg name="ns" value="manager"/>
+        <arg name="do_timestamp" value="false"/>
+    </include>
+
+</launch>

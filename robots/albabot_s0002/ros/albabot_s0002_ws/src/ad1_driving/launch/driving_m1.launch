@@ -1,0 +1,48 @@
+<launch>
+    <!--
+    조이스틱으로 로봇을 AGV 모드 또는 Remote 모드로 동작.
+    joy_dev : joystick device
+    joy_type=0(wire) 1(wireless)
+    -->
+    <!-- AD1-->
+    <!--arg name="joy_dev" value="/dev/input/js0"/>
+    <arg name="joy_type_wireless" value="1"/>
+    <arg name="agv_velocity" value="1.6"/>
+    <arg name="agv_kp" value="0.3"/>
+    <arg name="agv_ki" value="0.0"/>
+    <arg name="agv_kd" value="4.0"/>
+    <arg name="agv_gearratio" value="50"/>
+    <arg name="agv_w2wDist" value="0.338"/>
+    <arg name="agv_acc" value="0.2"/-->
+
+    <!-- ST1-->
+    <arg name="joy_dev" value="/dev/input/js0"/>
+    <arg name="joy_type_wireless" value="1"/>
+    <arg name="agv_velocity" value="1.0"/>
+    <arg name="agv_kp" value="0.3"/>
+    <arg name="agv_ki" value="0.0"/>
+    <arg name="agv_kd" value="1.5"/>
+    <arg name="agv_gearratio" value="30"/>
+    <arg name="agv_w2wDist" value="0.368"/>
+    <arg name="agv_acc" value="3.3"/>
+
+
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+
+    </node>
+
+    <node pkg="ad1_driving" type="driving_m1" name="driving_m1" output="screen" >
+        <param name="joy_type" value="$(arg joy_type_wireless)"/>
+        <param name="agv_velocity" value="$(arg agv_velocity)"/>
+        <param name="agv_kp" value="$(arg agv_kp)"/>
+        <param name="agv_ki" value="$(arg agv_ki)"/>
+        <param name="agv_kd" value="$(arg agv_kd)"/>
+        <param name="agv_gearratio" value="$(arg agv_gearratio)"/>
+        <param name="agv_w2wDist" value="$(arg agv_w2wDist)"/>
+        <param name="agv_acc" value="$(arg agv_acc)"/>
+    </node>
+
+
+
+</launch>

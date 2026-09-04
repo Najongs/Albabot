@@ -1,0 +1,23 @@
+<launch>
+    <arg name="agv_gearratio" value="30"/>
+    <arg name="agv_w2wDist" value="0.375"/>
+
+    <node name="example1" pkg="agv_example_pkg" type="albabot_mapping" output="screen">
+    </node>
+    <node name="test_rviz" pkg="rviz" type="rviz" args="-d $(find agv_example_pkg)/rviz/test01.rviz" />
+
+    <!--node name="example1" pkg="agv_example_pkg" type="ex1_node" output="screen">
+        <param name="agv_gearratio" value="$(arg agv_gearratio)"/>
+        <param name="agv_w2wDist" value="$(arg agv_w2wDist)"/>
+    </node>
+
+
+    <node name="albabot_sensor_node" pkg="albabot_base_pkg" type="albabot_sensor_node" output="screen">
+        <param name="agv_gearratio" value="$(arg agv_gearratio)"/>
+        <param name="agv_w2wDist" value="$(arg agv_w2wDist)"/>
+    </node-->
+
+
+
+
+</launch>

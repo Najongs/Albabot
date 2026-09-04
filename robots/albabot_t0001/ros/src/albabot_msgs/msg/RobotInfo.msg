@@ -1,0 +1,10 @@
+int64 left_enc
+int64 right_enc
+uint16[] sonic
+uint16[] hall
+uint16 batVoltage
+uint16 agvMissionCount
+uint8 agvStatus
+uint8 agvDirection
+uint8 agvCurrentMission
+uint16 gio

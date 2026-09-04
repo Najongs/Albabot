@@ -1,0 +1,34 @@
+<launch>
+
+    <arg name="joy_dev" value="/dev/input/js0"/>
+    <arg name="albabot_port" value="/dev/ttyUSB-Albabot"/>
+    <arg name="albabot_baud" value="921600"/>
+
+    <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" >
+        <param name="serial_port"         type="string" value="/dev/rplidar"/>
+        <param name="serial_baudrate"     type="int"    value="115200"/>
+        <param name="frame_id"            type="string" value="base_scan"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+    </node>
+
+
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" >
+        <param name="baud" value="$(arg albabot_baud)" />
+        <param name="port" value="$(arg albabot_port)" />
+    </node>
+
+    <node pkg="joy" type="joy_node" name="joy_node">
+        <param name="dev" type="string" value="$(arg joy_dev)"/>
+    </node>
+
+    <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>
+
+    <node name="agv_patrol" pkg="albabot_ad1_base" type="agv_patrol2" output="screen">
+        <param name="period" value="20.0"/>
+    </node>
+
+    <node name="ad1_lidar" pkg="albabot_ad1_base" type="ad1_lidar" output="screen" />
+
+
+</launch>
