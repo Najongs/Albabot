@@ -11,5 +11,6 @@ catkin_install_python(PROGRAMS
   scripts/safety_guard.py
   scripts/explorer.py
   scripts/set_remote_mode.py
+  scripts/monitor.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

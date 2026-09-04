@@ -1,0 +1,46 @@
+<launch>
+  <!-- ============================================================
+       record.launch  -  동작 관찰 + 로그 저장
+         인지(mapping) + 모터 시리얼(robot_info) + monitor(CSV) + rosbag(원본)
+       기본 drive:=false  -> 모터 명령 노드 없음 = 로봇 정지 (센서만 수집)
+       주행까지 로깅하려면 drive:=true (safety_guard/explorer 포함, ★바퀴 거치)
+       ============================================================ -->
+
+  <arg name="drive"     default="false"/>
+  <arg name="explore"   default="false"/>
+  <arg name="serial_no" default="934222071735"/>
+  <arg name="log_dir"   default="$(env HOME)/autoscan_logs"/>
+
+  <rosparam command="load" file="$(find albabot_autoscan)/config/autoscan.yaml"/>
+
+  <!-- 인지 -->
+  <include file="$(find albabot_autoscan)/launch/mapping.launch">
+    <arg name="serial_no" value="$(arg serial_no)"/>
+  </include>
+
+  <!-- 모터 시리얼 브리지 (robot_info: 엔코더/초음파/배터리 수집용) -->
+  <node name="serial_node" pkg="rosserial_python" type="serial_node.py" output="screen">
+    <param name="port" value="/dev/ttyUSB-Albabot"/>
+    <param name="baud" value="921600"/>
+  </node>
+
+  <!-- CSV 요약 로거 -->
+  <node name="monitor" pkg="albabot_autoscan" type="monitor.py" output="screen">
+    <param name="log_dir" value="$(arg log_dir)"/>
+    <param name="rate" value="5.0"/>
+  </node>
+
+  <!-- rosbag 원본 (작은 토픽만, 이미지 제외) -->
+  <node name="rosbag_record" pkg="rosbag" type="record" output="screen"
+        args="-o $(arg log_dir)/autoscan
+              /camera/scan /robot_info /camera/imu /cmd_vel /scan_cmd /rtabmap/odom /tf"/>
+
+  <!-- 주행 로깅(선택): 안전가드 + Remote모드 + (explore 시)탐색 -->
+  <group if="$(arg drive)">
+    <node name="set_remote_mode" pkg="albabot_autoscan" type="set_remote_mode.py" output="screen"/>
+    <node name="safety_guard" pkg="albabot_autoscan" type="safety_guard.py" output="screen"/>
+    <group if="$(arg explore)">
+      <node name="explorer" pkg="albabot_autoscan" type="explorer.py" output="screen"/>
+    </group>
+  </group>
+</launch>
