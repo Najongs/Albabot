@@ -21,9 +21,23 @@ explorer  ──/scan_cmd[v,w]──>  safety_guard  ──/cmd_vel[L,R]──> 
 ## 노드
 | 노드 | 입력 | 출력 | 역할 |
 |------|------|------|------|
-| `safety_guard.py` | `/camera/scan`, `/robot_info`, `/scan_cmd` | `/cmd_vel` | 안전판정·정지·감속·하트비트 |
+| `safety_guard.py` | `/camera/scan`, `/robot_info`, `/camera/imu`, `/scan_cmd` | `/cmd_vel` | 다중센서 안전판정·정지·감속·하트비트 |
 | `explorer.py` | `/camera/scan` | `/scan_cmd` | 저속 순항/회피 + 주기적 회전스캔 |
 | `set_remote_mode.py` | — | `/AlbabotMessage` | 부팅 시 Remote 모드 + 미션취소 |
+
+### safety_guard 다중 안전 레이어 (겹침, 하나라도 걸리면 정지)
+| 레이어 | 센서 | 감지 |
+|--------|------|------|
+| 거리 | 카메라 `/camera/scan` | 전방 위험거리 정지 / 감속거리 감속 |
+| 근접 | 초음파 `sonic[8]` | 진행방향(전진=전방4/후진=후방4) 근접 정지 |
+| **접촉/끼임** | 엔코더 `left/right_enc` | 전진 명령 중 엔코더 정지 → 스톨 → 정지+후진 회피 |
+| **충격/전복** | IMU `/camera/imu` | 가속도 스파이크(충돌) / 중력벡터 기울기(경사·전복) |
+| 전원 | `batVoltage` | 저전압 정지 (단위 미확정, 기본 off) |
+| 신호 | scan/cmd 끊김 | 입력 끊기면 정지 (+ 펌웨어 하트비트 데드맨) |
+
+> 별도 범퍼/E-stop 배선 없이 **엔코더 스톨 + IMU 충격**으로 접촉감지. `hall[2]`는 용도
+> 불명(자석선/전류 추정), `gio`는 펌웨어에서 미배선(0x0000)이라 현재 미사용.
+> 각 레이어는 `config/autoscan.yaml` 에서 on/off·임계값 조정. 배터리/스톨 임계값은 실측 후 보정 필요.
 
 파라미터: `config/autoscan.yaml` (거리 임계값·속도 상한 전부 보수적).
 

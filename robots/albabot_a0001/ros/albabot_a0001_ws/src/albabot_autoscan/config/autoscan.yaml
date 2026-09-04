@@ -13,10 +13,32 @@ safety_guard:
   slow_distance: 1.00               # 이 이내 -> 속도 선형 감속
   front_angle_deg: 40.0             # 전방 ±각도 창에서만 판단 (좌우 여유 무시)
 
-  # 초음파 (cm 가정, robot_info.sonic[0..3])
+  # 초음파 (cm 가정, robot_info.sonic[]). 전진=전방4, 후진=후방4 자동 선택
   use_ultrasonic: true
   ultrasonic_stop_cm: 30.0          # 이 이내 -> 정지
   ultrasonic_valid_max_cm: 250.0    # 이보다 크면 무효/미검출로 간주
+  ultrasonic_front_idx: [0, 1, 2, 3]
+  ultrasonic_rear_idx:  [4, 5, 6, 7]
+
+  # --- 접촉/충돌 감지 (별도 범퍼 없이 엔코더+IMU) ---
+  # 엔코더 스톨: 전진 명령 중인데 엔코더가 거의 안 변하면 접촉/끼임으로 판단
+  use_stall_detect: true
+  stall_check_sec: 0.7              # 이 시간 동안 관찰
+  stall_min_cmd: 0.15              # |v| 이 이상 명령 중일 때만 판정(정지중 오판 방지)
+  stall_enc_min_delta: 20          # 관찰창 엔코더 변화 이보다 작으면 스톨
+  stall_backoff_sec: 0.8           # 스톨 시 잠깐 후진 회피
+  stall_backoff_v: 0.25
+
+  # IMU 충격/기울기 (RealSense /camera/imu)
+  use_imu: true
+  imu_topic: "/camera/imu"
+  impact_accel: 4.0                 # |a|-g 가 이보다 크면 충격으로 정지(m/s^2)
+  tilt_stop_deg: 18.0               # 중력벡터 기울기 이보다 크면 정지(경사/전복)
+  imu_latch_sec: 2.0               # 충격 감지 후 이 시간 정지 유지
+
+  # 배터리 저전압 (단위 미확정 -> 기본 비활성, 실측 후 설정)
+  use_battery: false
+  battery_min: 3300                 # batVoltage 원값 기준(실측 후 조정)
 
   # 모터 변환/상한 (driving_m1 GetVelocity 규약과 동일 부호)
   wheel_base: 0.328                 # 축간거리 d
